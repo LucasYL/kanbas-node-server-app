@@ -5,6 +5,13 @@
         due: "2021-10-10", completed: false, score: 0,
       };
       
+      const module = {
+        id: 1,
+        name: "NodeJS Module",
+        description: "Learn NodeJS with ExpressJS",
+        course: "NodeJS Course",
+      };
+
       let todos = [
         { id: 1, title: "Task 1", completed: false },
         { id: 2, title: "Task 2", completed: true },
@@ -50,7 +57,7 @@
             res.json(todos);
           });
         
-
+        
         app.get("/a5/todos/:id", (req, res) => {
             const { id } = req.params;
             const todo = todos.find((t) => t.id === parseInt(id));
@@ -64,6 +71,27 @@
             res.json(todos);
           });
         
+        app.get("/a5/todos/:id/completed/:completed", (req, res) => {
+          const { id, completed } = req.params;
+          const todo = todos.find((t) => t.id === parseInt(id));
+          if (todo) {
+            todo.completed = completed === 'true';
+            res.json(todos);
+          } else {
+            res.status(404).send("Todo not found");
+          }
+        });
+      
+        app.get("/a5/todos/:id/description/:description", (req, res) => {
+          const { id, description } = req.params;
+          const todo = todos.find((t) => t.id === parseInt(id));
+          if (todo) {
+            todo.description = description;
+            res.json(todos);
+          } else {
+            res.status(404).send("Todo not found");
+          }
+        });
         
         app.delete("/a5/todos/:id", (req, res) => {
             const { id } = req.params;
@@ -120,6 +148,63 @@
         const { a, b } = req.params;
         const sum = parseInt(a) - parseInt(b);
         res.send(sum.toString());
+      });
+
+      app.get("/a5/module", (req, res) => {
+        res.json(module);
+      });
+
+      app.get("/a5/module/name", (req, res) => {
+        res.json(module.name);
+      });
+
+      app.get("/a5/module/name/:newName", (req, res) => {
+        const { newName } = req.params;
+        module.name = newName;
+        res.json(module);
+      });
+
+      app.get("/a5/add/:a/:b", (req, res) => {
+        const { a, b } = req.params;
+        const sum = parseInt(a) + parseInt(b);
+        res.send(sum.toString());
+      });
+      app.get("/a5/subtract/:a/:b", (req, res) => {
+        const { a, b } = req.params;
+        const sum = parseInt(a) - parseInt(b);
+        res.send(sum.toString());
+      });
+      app.get("/a5/multiply/:a/:b", (req, res) => {
+        const { a, b } = req.params;
+        const sum = parseInt(a) * parseInt(b);
+        res.send(sum.toString());
+      });
+      app.get("/a5/divide/:a/:b", (req, res) => {
+        const { a, b } = req.params;
+        const sum = parseInt(a) / parseInt(b);
+        res.send(sum.toString());
+      });
+
+      app.get("/a5/calculator", (req, res) => {
+        const { a, b, operation } = req.query;
+        let result = 0;
+        switch (operation) {
+          case "add":
+            result = parseInt(a) + parseInt(b);
+            break;
+          case "subtract":
+            result = parseInt(a) - parseInt(b);
+            break;
+          case "multiply":
+            result = parseInt(a) * parseInt(b);
+            break;
+          case "divide":
+            result = parseInt(a) / parseInt(b);
+            break;
+          default:
+            result = "Invalid operation";
+        }
+        res.send(result.toString());
       });
     
   };
